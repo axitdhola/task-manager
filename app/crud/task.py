@@ -23,3 +23,11 @@ def update_task(db: Session, task_id: int, task: task_schema.TaskUpdate) -> task
         db.commit()
         db.refresh(db_task)
     return db_task
+
+def delete_task(db: Session, task_id: int):
+    db_task = db.query(task_model.Task).filter(task_model.Task.id == task_id).first()
+    if db_task:
+        db.delete(db_task)
+        db.commit()
+    return db_task
+    
