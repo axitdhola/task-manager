@@ -10,3 +10,22 @@ router = APIRouter()
 def create_task(task: task_schema.TaskCreate, db: Session = Depends(get_db)):
     db_task = task_crud.create_task(db, task)
     return db_task
+
+@router.get("/", response_model=list[task_schema.Task])
+def get_tasks(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    tasks = task_crud.get_tasks(db, skip, limit)
+    return tasks
+
+@router.get("/task_id", response_model=task_schema.Task)
+def get_task(task_id: int, db: Session = Depends(get_db)):
+    tasks = task_crud.get_task(db, task_id)
+    if not tasks:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return tasks
+
+@router.put("/task_id", response_model=task_schema.Task)
+def update_task(task_id: int, task: task_schema.TaskUpdate, db: Session = Depends(get_db)):
+    db_task = task_crud.update_task(db, task_id, task)
+    if db_task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return db_task
