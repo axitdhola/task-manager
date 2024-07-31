@@ -1,12 +1,8 @@
 from fastapi import FastAPI
-
+from app.models import task as model
+from app.db.db import engine
+from app.api import task
+model.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello async World"}
-
-@app.post("/id")
-async def printId(id: int):
-    return {"id": 'Hello ' + str(id) + ' World'}
+app.include_router(task.router, prefix="/tasks", tags=["tasks"])
