@@ -22,7 +22,7 @@ def login_user(user: user_schema.UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Incorrect email")
     if not auth.verify_password(user.password, db_user.password):
         raise HTTPException(status_code=400, detail="Incorrect password")
-    access_token = auth.create_access_token(data={"id": db_user.id})
+    access_token = auth.create_access_token(data={"id": db_user.id, "email": db_user.email})
     return user_schema.Token(access_token=access_token, token_type="bearer")
 
 @router.get("/me", response_model=user_schema.User)

@@ -1,20 +1,22 @@
 from email.mime.text import MIMEText
 import smtplib
 from app.core.config import settings
+from app.schemas import task as task_schema
+from app.schemas import user as user_schema
 
-def send_email():
-    text = """\
-    Hi From Celery,
-    Check out the new post on the Mailtrap blog:
-    SMTP Server for Testing: Cloud-based or Local?
-    https://blog.mailtrap.io/2018/09/27/cloud-or-local-smtp-server/
-    Feel free to let us know what content would be useful for you!
+def send_email(user: user_schema.User, task: task_schema.Task):
+    text = f"""\
+    Hi {user.name},
+    You have created a new task
+    Task title : {task.title}
+    Task description : {task.description}
+    Thank you.
     """
 
     message = MIMEText(text, "plain")
     message["Subject"] = "Celery text email"
     message["From"] = settings.EMAIL_FROM
-    message["To"] = 'axitmw@gmail.com'
+    message["To"] = user.email
 
     with smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT) as server:
         server.starttls()  
