@@ -30,4 +30,13 @@ Install all project dependencies with
 ```bash
   pip install -r requirements.txt
 ```
+All environment variable are located in this [file](https://github.com/axitdhola/task-manager/blob/main/.env.example), so it is important you add them in a .env file before you run the server. \
+Start FastAPI Server
+```bash
+  uvicorn app.main:app --reload
+```
 
+Open another terminal within your virtualenv and run a celery worker
+```bash
+  celery -A app.worker.celery_app worker
+```
