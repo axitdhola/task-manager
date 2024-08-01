@@ -7,4 +7,5 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(Text)
+    user_id = Column(Integer, index=True)
 
