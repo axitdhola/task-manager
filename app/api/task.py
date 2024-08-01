@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 from app.schemas import task as task_schema
 from app.crud import task as task_crud
 from app.db.db import get_db
+from app.worker import send_task_email
 
 router = APIRouter()
 
 @router.post("/", response_model=task_schema.Task)
 def create_task(task: task_schema.TaskCreate, db: Session = Depends(get_db)):
     db_task = task_crud.create_task(db, task)
+    send_task_email.delay(db_task.id)
     return db_task
 
 @router.get("/", response_model=list[task_schema.Task])
