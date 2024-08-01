@@ -1,5 +1,5 @@
 # FastAPI Task Manager
-Using this project you can create task perform CRUD operation on task. Upon task creation we send email asynchronously using Celery. 
+This project allows users to log in, create tasks, and perform CRUD (Create, Read, Update, Delete) operations on tasks. When a task is created, an email is sent asynchronously using Celery.
 
 ## Prerequisites
 
