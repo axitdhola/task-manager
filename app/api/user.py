@@ -24,3 +24,7 @@ def login_user(user: user_schema.UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Incorrect password")
     access_token = auth.create_access_token(data={"id": db_user.id})
     return user_schema.Token(access_token=access_token, token_type="bearer")
+
+@router.get("/me", response_model=user_schema.User)
+def get_current_user(current_user: user_schema.User = Depends(auth.get_current_user)):
+    return current_user
